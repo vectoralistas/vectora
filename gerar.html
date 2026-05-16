@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vectora — Gerar Lista</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════ RESET & VARS ════════════════════════ */
+:root {
+  --navy:       #0F2747;
+  --navy-mid:   #1a3456;
+  --gold:       #C8A96B;
+  --gold-dim:   #a88a50;
+  --gold-pale:  #e8d9bc;
+  --white:      #ffffff;
+  --off:        #f9f7f4;
+  --cream:      #f4ede0;
+  --b1:         #e5ddd3;   /* border light */
+  --b2:         #ccc4b8;   /* border mid */
+  --muted:      #8a7f72;
+  --text:       #1a1410;
+  --r:  4px;
+  --rlg: 8px;
+  --sh: 0 2px 20px rgba(15,39,71,.065);
+  --sh2: 0 4px 32px rgba(15,39,71,.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--off); color:var(--text); font-size:14px; line-height:1.65; }
+
+/* ═══════════════════════ HEADER ══════════════════════════════ */
+header {
+  background:var(--navy); height:68px; padding:0 32px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:200;
+  border-bottom:1px solid rgba(200,169,107,.15);
+}
+.logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+.logo svg { width:42px; height:42px; flex-shrink:0; }
+.logo-text { display:flex; flex-direction:column; gap:2px; }
+.logo-name {
+  font-family:'Cormorant Garamond',serif; font-size:20px;
+  font-weight:400; color:#fff; letter-spacing:5px; line-height:1;
+}
+.logo-sub { font-size:9px; color:var(--gold); letter-spacing:3px; text-transform:uppercase; font-weight:300; }
+.h-badge {
+  font-size:10px; color:rgba(200,169,107,.65);
+  letter-spacing:1.5px; text-transform:uppercase; font-weight:300;
+  display:flex; align-items:center; gap:7px;
+}
+.h-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); opacity:.5; }
+@media(max-width:520px){ header{padding:0 16px;} .h-badge{display:none;} }
+
+/* ═══════════════════════ MAIN ════════════════════════════════ */
+main { max-width:720px; margin:0 auto; padding:52px 20px 96px; }
+
+/* ═══════════════════════ PAGE TITLE ══════════════════════════ */
+.pg-title { text-align:center; margin-bottom:44px; }
+.pg-eye {
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:10px; color:var(--gold-dim);
+  letter-spacing:3px; text-transform:uppercase; margin-bottom:18px;
+}
+.pg-eye::before,.pg-eye::after { content:''; width:28px; height:1px; background:var(--gold-dim); }
+.pg-title h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,4.5vw,40px); font-weight:300;
+  color:var(--navy); letter-spacing:.5px; line-height:1.2; margin-bottom:12px;
+}
+.pg-title p { font-size:14px; color:var(--muted); font-weight:300; max-width:460px; margin:0 auto; line-height:1.75; }
+
+/* ═══════════════════════ STEPS ═══════════════════════════════ */
+.steps { display:flex; align-items:center; justify-content:center; margin-bottom:40px; }
+.step { display:flex; align-items:center; gap:8px; opacity:.3; transition:opacity .3s; }
+.step.active { opacity:1; }
+.step.done   { opacity:.6; }
+.step-n {
+  width:24px; height:24px; border-radius:50%;
+  border:1px solid var(--gold-dim); font-family:'Cormorant Garamond',serif;
+  font-size:11px; color:var(--gold-dim);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:background .3s, border-color .3s;
+}
+.step.active .step-n { background:var(--navy); border-color:var(--gold); color:var(--gold); }
+.step.done   .step-n { background:var(--gold-dim); border-color:var(--gold-dim); color:#fff; font-size:9px; }
+.step-lbl { font-size:11px; color:var(--navy); letter-spacing:.5px; white-space:nowrap; }
+.step-ln { width:44px; height:1px; background:var(--b1); margin:0 4px; flex-shrink:0; }
+@media(max-width:480px){ .step-lbl{display:none;} .step-ln{width:18px;} }
+
+/* ═══════════════════════ CARDS ═══════════════════════════════ */
+.card { background:#fff; border:1px solid var(--b1); border-radius:var(--rlg); margin-bottom:18px; overflow:hidden; box-shadow:var(--sh); transition:box-shadow .25s; }
+.card:hover { box-shadow:var(--sh2); }
+.card-hd { background:var(--navy); padding:15px 28px; display:flex; align-items:center; gap:12px; }
+.card-hd-n {
+  width:23px; height:23px; border-radius:50%;
+  border:1px solid rgba(200,169,107,.35);
+  font-family:'Cormorant Garamond',serif; font-size:13px;
+  color:var(--gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.card-hd-t { font-size:11px; font-weight:400; color:rgba(255,255,255,.82); letter-spacing:2px; text-transform:uppercase; }
+.card-bd { padding:26px 28px 22px; }
+@media(max-width:560px){ .card-bd{padding:18px 16px;} }
+
+/* ═══════════════════════ FORM ELEMENTS ═══════════════════════ */
+.fg { margin-bottom:18px; }
+.fg:last-child { margin-bottom:0; }
+.r2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:540px){ .r2{grid-template-columns:1fr;} }
+
+label { display:block; font-size:10px; font-weight:500; color:var(--navy); letter-spacing:1.8px; text-transform:uppercase; margin-bottom:6px; }
+label .opt { color:var(--muted); font-weight:300; text-transform:none; letter-spacing:0; margin-left:4px; font-size:10px; }
+label .req { color:var(--gold-dim); margin-left:2px; }
+
+input[type=text],input[type=email],input[type=color],select,textarea {
+  width:100%; padding:10px 13px;
+  border:1px solid var(--b1); border-radius:var(--r);
+  font-family:'DM Sans',sans-serif; font-size:13.5px;
+  color:var(--text); background:#fff;
+  outline:none; appearance:none; -webkit-appearance:none;
+  transition:border-color .18s, box-shadow .18s;
+}
+input[type=text]:focus,input[type=email]:focus,select:focus,textarea:focus {
+  border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,169,107,.12);
+}
+input[type=color] { padding:4px 6px; height:40px; cursor:pointer; }
+input::placeholder,textarea::placeholder { color:var(--b2); font-weight:300; }
+select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23C8A96B' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 13px center;
+  padding-right:36px; cursor:pointer;
+}
+select:disabled { opacity:.35; cursor:not-allowed; }
+textarea { resize:vertical; min-height:80px; line-height:1.65; }
+
+/* ═══════════════════════ TOKEN ═══════════════════════════════ */
+.tok-row { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:end; }
+@media(max-width:420px){ .tok-row{grid-template-columns:1fr;} }
+.btn-val {
+  padding:10px 22px; background:var(--navy); color:var(--gold);
+  border:1px solid rgba(200,169,107,.3); border-radius:var(--r);
+  font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer; white-space:nowrap;
+  transition:background .2s;
+}
+.btn-val:hover { background:var(--navy-mid); }
+.btn-val:disabled { opacity:.4; cursor:not-allowed; }
+.btn-val.ok { background:#14532d; border-color:#14532d; color:#fff; }
+
+.credit-panel {
+  display:none; margin-top:12px; background:var(--off);
+  border:1px solid var(--b1); border-left:3px solid var(--gold);
+  border-radius:var(--r); padding:12px 18px;
+  align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.credit-panel.show { display:flex; animation:fup .35s ease; }
+.cr-info { display:flex; flex-direction:column; gap:1px; }
+.cr-name { font-size:13px; font-weight:500; color:var(--navy); }
+.cr-sub  { font-size:10px; color:var(--muted); letter-spacing:.4px; }
+.cr-badge { display:flex; align-items:center; gap:6px; background:var(--navy); color:var(--gold); padding:7px 14px; border-radius:20px; font-size:12px; }
+.cr-badge strong { font-family:'Cormorant Garamond',serif; font-size:20px; line-height:1; font-weight:400; }
+.cr-badge small { font-size:9px; opacity:.6; }
+
+/* ═══════════════════════ FORM SECTION ════════════════════════ */
+#form-section { display:none; }
+#form-section.show { display:block; animation:fup .45s ease; }
+
+/* ═══════════════════════ SEPARATORS ══════════════════════════ */
+.sep { display:flex; align-items:center; gap:14px; margin:4px 0 16px; }
+.sep-ln { flex:1; height:1px; background:var(--b1); }
+.sep-lb { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+
+/* ═══════════════════════ QUANTIDADE — SEGMENTED ══════════════ */
+.qty-seg { display:flex; gap:0; border:1px solid var(--b1); border-radius:var(--r); overflow:hidden; }
+.qty-seg input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+.qty-seg-lbl {
+  flex:1; text-align:center; padding:10px 4px;
+  font-size:13px; font-weight:400; color:var(--muted);
+  cursor:pointer; background:#fff; border-right:1px solid var(--b1);
+  transition:background .15s, color .15s;
+  font-family:'Cormorant Garamond',serif;
+  line-height:1;
+}
+.qty-seg-lbl:last-of-type { border-right:none; }
+.qty-seg input:checked + .qty-seg-lbl {
+  background:var(--navy); color:var(--gold); font-weight:500;
+}
+.qty-seg-lbl:hover:not(:has(+ input:checked)) { background:var(--off); color:var(--navy); }
+
+/* ═══════════════════════ RADIO CARDS — MATERIAL ══════════════ */
+.mat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+@media(max-width:460px){ .mat-grid{grid-template-columns:1fr;} }
+.rc { position:relative; }
+.rc input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+.rc-lbl {
+  display:flex; flex-direction:column; gap:3px;
+  padding:13px 12px; border:1px solid var(--b1);
+  border-radius:var(--r); cursor:pointer;
+  background:#fff; transition:border-color .18s, background .18s;
+  position:relative;
+}
+.rc-lbl:hover { border-color:var(--gold-pale); }
+.rc input:checked + .rc-lbl { border-color:var(--gold); background:rgba(200,169,107,.05); }
+.rc-dot {
+  width:14px; height:14px; border-radius:50%;
+  border:1px solid var(--b2); margin-bottom:6px;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .18s, background .18s; flex-shrink:0;
+}
+.rc input:checked + .rc-lbl .rc-dot { border-color:var(--gold); background:var(--gold); }
+.rc input:checked + .rc-lbl .rc-dot::after { content:''; width:5px; height:5px; background:#fff; border-radius:50%; }
+.rc-title { font-size:12px; font-weight:500; color:var(--navy); }
+.rc-desc  { font-size:11px; color:var(--muted); font-weight:300; line-height:1.4; }
+.rc-badge {
+  position:absolute; top:9px; right:9px;
+  font-size:9px; background:var(--gold); color:var(--navy);
+  padding:2px 7px; border-radius:10px; font-weight:500; letter-spacing:.4px;
+}
+
+/* ═══════════════════════ APARÊNCIA — CAMPOS ══════════════════ */
+#apearance-section { display:none; }
+#apearance-section.show { display:block; }
+
+.color-presets { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+.color-opt { display:none; }
+.color-opt-lbl {
+  width:32px; height:32px; border-radius:50%; cursor:pointer;
+  border:2px solid transparent; transition:border-color .15s, transform .15s;
+  position:relative;
+}
+.color-opt-lbl::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  opacity:0; background:rgba(255,255,255,.35);
+}
+.color-opt:checked + .color-opt-lbl { border-color:var(--gold); transform:scale(1.12); }
+.color-opt:checked + .color-opt-lbl::after { opacity:1; }
+.color-opt-lbl[data-color="azul"]   { background:#0F2747; }
+.color-opt-lbl[data-color="verde"]  { background:#166534; }
+.color-opt-lbl[data-color="roxo"]   { background:#6D28D9; }
+.color-opt-lbl[data-color="verm"]   { background:#B91C1C; }
+.color-opt-lbl[data-color="cinza"]  { background:#374151; }
+.color-opt-lbl[data-color="custom"] {
+  background:conic-gradient(#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);
+  border-color:var(--b1);
+}
+
+#custom-hex-wrap { display:none; margin-top:10px; }
+#custom-hex-wrap.show { display:block; }
+
+.toggle-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.toggle-lbl { font-size:13px; color:var(--text); }
+.toggle {
+  width:44px; height:24px; border-radius:12px;
+  border:1px solid var(--b2); background:var(--off);
+  cursor:pointer; position:relative; flex-shrink:0;
+  transition:background .2s, border-color .2s;
+  appearance:none; -webkit-appearance:none;
+}
+.toggle::after {
+  content:''; position:absolute; top:3px; left:3px;
+  width:16px; height:16px; border-radius:50%;
+  background:var(--b2); transition:left .2s, background .2s;
+}
+.toggle:checked { background:var(--navy); border-color:var(--navy); }
+.toggle:checked::after { left:23px; background:var(--gold); }
+
+.plan-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10px; font-weight:500; letter-spacing:.5px;
+  padding:3px 9px; border-radius:10px;
+  background:rgba(200,169,107,.12); color:var(--gold-dim);
+  border:1px solid rgba(200,169,107,.25);
+}
+
+/* ═══════════════════════ INFO BOX ════════════════════════════ */
+.infobox { background:var(--off); border:1px solid var(--b1); border-radius:var(--r); padding:12px 16px; }
+.infobox p { font-size:12px; color:var(--muted); font-weight:300; line-height:1.7; }
+.infobox strong { color:var(--navy); font-weight:500; }
+.infobox.gold { border-left:3px solid var(--gold); }
+
+/* ═══════════════════════ MESSAGES ════════════════════════════ */
+.msg { display:none; padding:11px 15px; border-radius:var(--r); font-size:12.5px; margin-top:10px; line-height:1.6; }
+.msg.err  { display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
+.msg.ok   { display:block; background:#f0fdf4; border:1px solid #bbf7d0; color:#14532d; }
+.msg.wait { display:block; background:var(--off); border:1px solid var(--b1); color:var(--navy); }
+
+/* ═══════════════════════ SUBMIT ══════════════════════════════ */
+.sub-wrap { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.btn-sub {
+  width:100%; padding:15px 28px; background:var(--navy); color:#fff;
+  border:1px solid rgba(200,169,107,.22); border-radius:var(--r);
+  font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+  letter-spacing:2.5px; text-transform:uppercase; cursor:pointer;
+  transition:background .2s, transform .1s;
+}
+.btn-sub:hover { background:var(--navy-mid); }
+.btn-sub:active { transform:scale(.99); }
+.btn-sub:disabled { opacity:.42; cursor:not-allowed; }
+.sub-note { font-size:11px; color:var(--muted); text-align:center; font-weight:300; max-width:440px; line-height:1.7; }
+
+/* ═══════════════════════ SPINNER ═════════════════════════════ */
+.spin { display:inline-block; width:13px; height:13px; border:2px solid rgba(200,169,107,.22); border-top-color:var(--gold); border-radius:50%; animation:rot .65s linear infinite; vertical-align:middle; margin-right:7px; }
+
+/* ═══════════════════════ FOOTER ══════════════════════════════ */
+footer { text-align:center; padding:36px 20px; border-top:1px solid var(--b1); margin-top:24px; }
+.ft-logo { font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:5px; color:var(--navy); margin-bottom:5px; }
+.ft-sub  { font-size:11px; color:var(--muted); font-weight:300; letter-spacing:.5px; }
+
+/* ═══════════════════════ ANIMATIONS ══════════════════════════ */
+@keyframes rot { to{transform:rotate(360deg);} }
+@keyframes fup { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <!--
+      LOGO SVG — estrutura correta:
+      5 nós: topo (apex), esquerdo superior, direito superior,
+              centro (grande/hub), inferior
+      Linhas: topo→esq, topo→dir, esq→centro, dir→centro, centro→inf
+    -->
+    <svg viewBox="0 0 100 106" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Vectora">
+      <!-- Linhas -->
+      <line x1="50" y1="8"  x2="18" y2="32" stroke="#C8A96B" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="50" y1="8"  x2="82" y2="32" stroke="#C8A96B" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="18" y1="32" x2="50" y2="58" stroke="#C8A96B" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="82" y1="32" x2="50" y2="58" stroke="#C8A96B" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="50" y1="58" x2="50" y2="84" stroke="#C8A96B" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- Nós externos (pequenos) -->
+      <circle cx="50" cy="8"  r="5.5" fill="#C8A96B"/>
+      <circle cx="18" cy="32" r="5.5" fill="#C8A96B"/>
+      <circle cx="82" cy="32" r="5.5" fill="#C8A96B"/>
+      <circle cx="50" cy="84" r="5.5" fill="#C8A96B"/>
+      <!-- Hub central (grande) -->
+      <circle cx="50" cy="58" r="9"   fill="#C8A96B"/>
+    </svg>
+    <div class="logo-text">
+      <span class="logo-name">VECTORA</span>
+      <span class="logo-sub">Listas Inteligentes</span>
+    </div>
+  </a>
+  <div class="h-badge"><div class="h-dot"></div>Motor de IA Pedagógica</div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <div class="pg-title">
+    <div class="pg-eye">Geração personalizada</div>
+    <h1>Sua lista de exercícios,<br><em>em segundos</em></h1>
+    <p>Defina o tema, o nível e o perfil. O motor Vectora gera uma lista calibrada, com gabarito e resolução quando necessário.</p>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step active" id="s1"><div class="step-n">1</div><span class="step-lbl">Acesso</span></div>
+    <div class="step-ln"></div>
+    <div class="step" id="s2"><div class="step-n">2</div><span class="step-lbl">Configuração</span></div>
+    <div class="step-ln"></div>
+    <div class="step" id="s3"><div class="step-n">3</div><span class="step-lbl">Gerar</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CARD 1 — IDENTIFICAÇÃO E ACESSO
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-hd"><div class="card-hd-n">1</div><span class="card-hd-t">Identificação e acesso</span></div>
+    <div class="card-bd">
+
+      <div class="r2">
+        <div class="fg">
+          <label for="f-email">E-mail do professor<span class="req">*</span></label>
+          <input type="email" id="f-email" placeholder="seu@email.com" autocomplete="email">
+        </div>
+        <div class="fg">
+          <label for="f-prof">Nome / escola<span class="req">*</span></label>
+          <input type="text"  id="f-prof" placeholder="Prof. André Botelho">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label for="f-token">Token de acesso<span class="req">*</span></label>
+        <div class="tok-row">
+          <input type="text" id="f-token" placeholder="Seu código de acesso"
+            style="font-family:monospace;letter-spacing:1.5px;" autocomplete="off">
+          <button class="btn-val" id="btn-val" onclick="validarToken()">Validar</button>
+        </div>
+        <div class="credit-panel" id="credit-panel">
+          <div class="cr-info">
+            <span class="cr-name" id="cr-nome">—</span>
+            <span class="cr-sub">Token ativo · <span id="cr-plano-lbl">—</span></span>
+          </div>
+          <div class="cr-badge">
+            <strong id="cr-saldo">—</strong>
+            <small>créditos</small>
+          </div>
+        </div>
+        <div class="msg" id="msg-token"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FORM SECTION — libera após validação
+  ══════════════════════════════════════════ -->
+  <div id="form-section">
+
+    <!-- CARD 2 — CONTEÚDO DA LISTA -->
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-n">2</div><span class="card-hd-t">Conteúdo da lista</span></div>
+      <div class="card-bd">
+
+        <div class="r2">
+          <div class="fg">
+            <label for="f-nivel">Nível escolar<span class="req">*</span></label>
+            <select id="f-nivel" onchange="onNivel()">
+              <option value="">Selecione o nível</option>
+              <option value="Fundamental 1">Fundamental 1</option>
+              <option value="Fundamental 2">Fundamental 2</option>
+              <option value="Ensino Médio">Ensino Médio</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label for="f-tema">Tema específico<span class="req">*</span></label>
+            <select id="f-tema" disabled>
+              <option value="">Selecione o nível primeiro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label for="f-perfil">Perfil de geração<span class="req">*</span></label>
+          <select id="f-perfil" onchange="onPerfil()">
+            <option value="">Selecione o perfil</option>
+            <option value="Escolar padrão">Escolar padrão — fixação e revisão</option>
+            <option value="ENEM">ENEM — contextualização e interpretação</option>
+            <option value="Vestibulares">Vestibulares — densidade técnica</option>
+            <option value="Olimpíadas">Olimpíadas — raciocínio e elegância</option>
+            <option value="Militares">Militares — calibrado por banca</option>
+          </select>
+        </div>
+
+        <div class="fg" id="banca-wrap" style="display:none">
+          <label for="f-banca">Banca / concurso militar<span class="req">*</span></label>
+          <select id="f-banca">
+            <option value="">Selecione a banca</option>
+            <optgroup label="Grupo 1 — Fundamental/Médio">
+              <option value="Colégio Naval">Colégio Naval</option>
+              <option value="EPCAR">EPCAR</option>
+            </optgroup>
+            <optgroup label="Grupo 2 — Avançado">
+              <option value="AFA">AFA — Aeronáutica</option>
+              <option value="Escola Naval">Escola Naval</option>
+              <option value="EFOMM">EFOMM</option>
+              <option value="EsPCEx">EsPCEx</option>
+            </optgroup>
+            <optgroup label="Grupo 3">
+              <option value="ESA">ESA</option>
+              <option value="EEAR">EEAR</option>
+            </optgroup>
+            <optgroup label="Grupo 4 — Muito avançado">
+              <option value="IME">IME</option>
+              <option value="ITA">ITA</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="r2">
+          <div class="fg">
+            <label for="f-obj">Objetivo pedagógico</label>
+            <select id="f-obj">
+              <option value="">Selecione</option>
+              <option value="Fixação e revisão">Fixação e revisão</option>
+              <option value="Introdução ao tema">Introdução ao tema</option>
+              <option value="Aprofundamento">Aprofundamento</option>
+              <option value="Preparação para prova">Preparação para prova</option>
+              <option value="Recuperação">Recuperação</option>
+              <option value="Diagnóstico">Diagnóstico</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label for="f-dif">Dificuldade predominante</label>
+            <select id="f-dif">
+              <option value="">Selecione</option>
+              <option value="Fácil">Fácil</option>
+              <option value="Médio">Médio</option>
+              <option value="Difícil">Difícil</option>
+              <option value="Mista">Mista — progressiva</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="r2">
+          <div class="fg">
+            <!--
+              NOTA SOBRE FORMATO DOS EXERCÍCIOS:
+              Os valores abaixo são passados diretamente ao prompt da IA.
+              "Discursivos" e "Com alternativas" são reconhecidos pelo modelo.
+              Para comportamento específico (ex: gerar opções A/B/C/D),
+              adicione uma regra no buildPromptUserInput_ do AppScript.
+            -->
+            <label for="f-estilo">Formato dos exercícios</label>
+            <select id="f-estilo">
+              <option value="">Qualquer formato</option>
+              <option value="Discursivos">Discursivos</option>
+              <option value="Com alternativas">Com alternativas (A/B/C/D)</option>
+              <option value="Mistos">Mistos</option>
+              <option value="Contextualizados">Contextualizados</option>
+              <option value="Cálculo direto">Cálculo direto</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label for="f-foco">Foco da lista<span class="opt">(opcional)</span></label>
+            <input type="text" id="f-foco" placeholder="ex: média harmônica, velocidade média">
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /card2 -->
+
+    <!-- CARD 3 — QUANTIDADE E TIPO -->
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-n">3</div><span class="card-hd-t">Quantidade e tipo de material</span></div>
+      <div class="card-bd">
+
+        <div class="fg">
+          <label>Quantidade de exercícios<span class="req">*</span></label>
+          <!-- Segmentado: apenas 5, 10, 15, 20, 25, 30 -->
+          <div class="qty-seg" role="group" aria-label="Quantidade">
+            <input type="radio" name="qty" id="q5"  value="5"  id="q5">
+            <label class="qty-seg-lbl" for="q5">5</label>
+            <input type="radio" name="qty" id="q10" value="10" checked>
+            <label class="qty-seg-lbl" for="q10">10</label>
+            <input type="radio" name="qty" id="q15" value="15">
+            <label class="qty-seg-lbl" for="q15">15</label>
+            <input type="radio" name="qty" id="q20" value="20">
+            <label class="qty-seg-lbl" for="q20">20</label>
+            <input type="radio" name="qty" id="q25" value="25">
+            <label class="qty-seg-lbl" for="q25">25</label>
+            <input type="radio" name="qty" id="q30" value="30">
+            <label class="qty-seg-lbl" for="q30">30</label>
+          </div>
+        </div>
+
+        <div class="sep"><div class="sep-ln"></div><span class="sep-lb">Tipo de material</span><div class="sep-ln"></div></div>
+
+        <div class="fg">
+          <div class="mat-grid">
+
+            <div class="rc">
+              <input type="radio" name="tipo" id="t1" value="Lista apenas exercícios" checked>
+              <label class="rc-lbl" for="t1">
+                <div class="rc-dot"></div>
+                <span class="rc-title">Só exercícios</span>
+                <span class="rc-desc">Lista limpa, sem gabarito</span>
+                <span class="rc-badge">1 cr</span>
+              </label>
+            </div>
+
+            <div class="rc">
+              <input type="radio" name="tipo" id="t2" value="Lista gabarito no mesmo PDF">
+              <label class="rc-lbl" for="t2">
+                <div class="rc-dot"></div>
+                <span class="rc-title">+ Gabarito</span>
+                <span class="rc-desc">Respostas finais no PDF</span>
+                <span class="rc-badge">2 cr</span>
+              </label>
+            </div>
+
+            <div class="rc">
+              <input type="radio" name="tipo" id="t3" value="Lista resolução completa">
+              <label class="rc-lbl" for="t3">
+                <div class="rc-dot"></div>
+                <span class="rc-title">+ Resolução</span>
+                <span class="rc-desc">Gabarito + desenvolvimento</span>
+                <span class="rc-badge">3 cr</span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /card3 -->
+
+    <!-- CARD 4 — INSTRUÇÕES AO PROFESSOR -->
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-n">4</div><span class="card-hd-t">Instruções ao professor</span></div>
+      <div class="card-bd">
+
+        <div class="fg">
+          <label for="f-recorte">Recorte específico do conteúdo<span class="opt">(quanto mais detalhe, melhor)</span></label>
+          <textarea id="f-recorte" rows="3"
+            placeholder="ex: Focar em média harmônica com velocidade. Incluir ao menos 3 situações contextualizadas. Evitar raízes difíceis. Preparação para Colégio Naval."></textarea>
+        </div>
+
+        <div class="fg">
+          <label for="f-obs">Observações e detalhes adicionais<span class="opt">(opcional)</span></label>
+          <textarea id="f-obs" rows="2"
+            placeholder="ex: Lista para aplicar amanhã no 9º ano. Manter linguagem acessível."></textarea>
+        </div>
+
+      </div>
+    </div><!-- /card4 -->
+
+    <!-- CARD 5 — APARÊNCIA -->
+    <div class="card">
+      <div class="card-hd"><div class="card-hd-n">5</div><span class="card-hd-t">Aparência da lista</span></div>
+      <div class="card-bd">
+
+        <div class="fg">
+          <label for="f-layout">Layout da lista</label>
+          <select id="f-layout">
+            <option value="Simples">Simples — compacto e direto</option>
+            <option value="Professor">Professor — destaque visual por questão</option>
+            <option value="Institucional">Institucional — com capa e visão geral</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <div class="toggle-row">
+            <span class="toggle-lbl">Exibir meu nome no cabeçalho do PDF</span>
+            <input type="checkbox" class="toggle" id="f-exibir-prof" checked>
+          </div>
+        </div>
+
+        <!-- PERSONALIZAÇÃO — Plano Pro ou Premium -->
+        <div id="apearance-section">
+
+          <div class="sep"><div class="sep-ln"></div><span class="sep-lb">Personalização de cores</span><div class="sep-ln"></div></div>
+
+          <div class="fg">
+            <label>Cor principal</label>
+            <div class="color-presets">
+              <input type="radio" class="color-opt" name="cor" id="c-azul"   value="Azul Vectora"  checked>
+              <label class="color-opt-lbl" for="c-azul"   data-color="azul"  title="Azul Vectora (padrão)"></label>
+
+              <input type="radio" class="color-opt" name="cor" id="c-verde"  value="Verde">
+              <label class="color-opt-lbl" for="c-verde"  data-color="verde" title="Verde"></label>
+
+              <input type="radio" class="color-opt" name="cor" id="c-roxo"   value="Roxo">
+              <label class="color-opt-lbl" for="c-roxo"   data-color="roxo"  title="Roxo"></label>
+
+              <input type="radio" class="color-opt" name="cor" id="c-verm"   value="Vermelho">
+              <label class="color-opt-lbl" for="c-verm"   data-color="verm"  title="Vermelho"></label>
+
+              <input type="radio" class="color-opt" name="cor" id="c-cinza"  value="Cinza/Preto">
+              <label class="color-opt-lbl" for="c-cinza"  data-color="cinza" title="Cinza/Preto"></label>
+
+              <input type="radio" class="color-opt" name="cor" id="c-custom" value="Cor personalizada"
+                onchange="document.getElementById('custom-hex-wrap').classList.add('show')"
+                onclick="document.getElementById('custom-hex-wrap').classList.add('show')">
+              <label class="color-opt-lbl" for="c-custom" data-color="custom" title="Cor personalizada"></label>
+            </div>
+            <!-- cliques nos outros escondem o campo hex -->
+            <script>
+              document.querySelectorAll('.color-opt:not(#c-custom)').forEach(el => {
+                el.addEventListener('change', () =>
+                  document.getElementById('custom-hex-wrap').classList.remove('show'));
+              });
+            </script>
+            <div id="custom-hex-wrap">
+              <label for="f-hex" style="margin-top:10px;">Código hex da cor<span class="req">*</span></label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="color" id="f-hex-picker" value="#0F2747"
+                  oninput="document.getElementById('f-hex').value=this.value" style="width:48px;flex-shrink:0">
+                <input type="text" id="f-hex" placeholder="#0F2747" maxlength="7"
+                  oninput="document.getElementById('f-hex-picker').value=this.value||'#000000'">
+              </div>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label for="f-moldura">Estilo da moldura</label>
+            <select id="f-moldura">
+              <option value="Moldura padrão">Moldura padrão</option>
+              <option value="Sem moldura">Sem moldura</option>
+              <option value="Moldura discreta">Moldura discreta</option>
+              <option value="Moldura destacada">Moldura destacada</option>
+            </select>
+          </div>
+
+          <!-- WHITE LABEL — só Premium -->
+          <div id="white-label-section" style="display:none">
+            <div class="sep"><div class="sep-ln"></div><span class="sep-lb">White label</span><div class="sep-ln"></div></div>
+
+            <div class="fg">
+              <label for="f-marca">Exibição da marca</label>
+              <select id="f-marca" onchange="onMarca()">
+                <option value="Vectora (padrão)">Vectora (padrão)</option>
+                <option value="Remover marca Vectora e usar nome próprio/institucional">Substituir pela minha marca</option>
+              </select>
+            </div>
+
+            <div class="fg" id="nome-cabe-wrap" style="display:none">
+              <label for="f-nome-cab">Nome para exibir no cabeçalho<span class="req">*</span></label>
+              <input type="text" id="f-nome-cab" placeholder="ex: Prof. André · Cursinho Naval Rio">
+            </div>
+          </div>
+
+        </div><!-- /apearance-section -->
+
+        <!-- Plano Basic: aviso -->
+        <div class="infobox gold" id="upgrade-notice" style="margin-top:6px;">
+          <p>
+            <strong>Personalização de aparência</strong> está disponível nos planos Pro e Premium.
+            Sua lista será gerada com a identidade visual padrão Vectora.
+            <a href="mailto:contato@vectora.app" style="color:var(--gold-dim);font-weight:500;">Fale conosco para upgrade.</a>
+          </p>
+        </div>
+
+      </div>
+    </div><!-- /card5 -->
+
+    <!-- CARD 6 — SUBMETER -->
+    <div class="card">
+      <div class="card-bd">
+        <div class="sub-wrap">
+          <button class="btn-sub" id="btn-sub" onclick="enviar()">
+            Gerar lista de exercícios
+          </button>
+          <p class="sub-note">
+            O PDF será gerado e enviado para o seu e-mail. O processamento leva entre 30 e 90 segundos conforme o tipo de material.
+          </p>
+        </div>
+        <div class="msg" id="msg-sub"></div>
+      </div>
+    </div>
+
+  </div><!-- /form-section -->
+
+</main>
+
+<footer>
+  <div class="ft-logo">VECTORA</div>
+  <div class="ft-sub">Motor de IA pedagógica · Listas Inteligentes · © 2025</div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   ⚙ CONFIGURAÇÃO — edite apenas esta seção
+
+   1. Cole a URL do seu Apps Script Web App (termina em /exec)
+   2. Publique o vectora-doPost.gs no seu AppScript
+
+   Para publicar como Web App:
+     Apps Script → Implantar → Nova implantação →
+     Web App → Executar como: Eu → Acesso: Qualquer pessoa
+══════════════════════════════════════════════════════════════ */
+const SCRIPT_URL = 'COLE_SUA_URL_AQUI';
+
+/* ══════════════════════════════════════════════════════════════
+   TEMAS — espelham exatamente as chaves do THEMES_MAP
+
+   Para adicionar tema novo:
+   1. Homologue no AppScript (THEMES_MAP + bancos + alias)
+   2. Adicione o nome aqui na lista do nível correto
+   O value deve ser IDÊNTICO à chave no THEMES_MAP.
+══════════════════════════════════════════════════════════════ */
+const TEMAS = {
+  'Fundamental 1': [
+    'adição',
+    'subtração',
+    'multiplicação',
+    'divisão',
+    'operações mistas',
+    'tabuada',
+    'dobro, triplo e metade',
+    'par e ímpar',
+    'sequências numéricas',
+    'comparação de números',
+    'sistema monetário',
+    'medidas de tempo',
+    'medidas de comprimento',
+    'problemas matemáticos simples',
+  ],
+  'Fundamental 2': [
+    'as quatro operações',
+    'frações',
+    'frações algébricas',
+    'números decimais',
+    'porcentagem',
+    'razão e proporção',
+    'regra de três simples',
+    'mmc e mdc',
+    'médias',
+    'misturas',
+    'sistemas de numeração',
+    'potenciação',
+    'raiz quadrada simples',
+    'expressões numéricas',
+    'equação do 1º grau',
+    'sistema de equações simples',
+    'área e perímetro',
+    'ângulos',
+    'plano cartesiano simples',
+    'função do 1º grau',
+    'produtos notáveis',
+    'fatoração algébrica',
+  ],
+  'Ensino Médio': [
+    'função do 1º grau (ensino médio)',
+    'função do 2º grau',
+    'interpretação de gráficos',
+    'progressão aritmética',
+    'progressão geométrica',
+    'probabilidade básica',
+    'análise combinatória básica',
+    'sistemas lineares (2x2)',
+    'matrizes (operações básicas)',
+    'determinantes (2x2 e 3x3)',
+  ]
+};
+
+/* ══════════════════════════════════════════════════════════════
+   ESTADO
+══════════════════════════════════════════════════════════════ */
+let tokenOk = false;
+let planInfo = { plano: 'basic', podePersonalizar: false, podeWhiteLabel: false };
+
+/* ══════════════════════════════════════════════════════════════
+   NÍVEL → TEMAS
+══════════════════════════════════════════════════════════════ */
+function onNivel() {
+  const nivel = document.getElementById('f-nivel').value;
+  const sel   = document.getElementById('f-tema');
+  sel.innerHTML = '<option value="">Selecione o tema</option>';
+  if (nivel && TEMAS[nivel]) {
+    TEMAS[nivel].forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t;
+      // Display capitalizado, value exato do THEMES_MAP
+      opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      sel.appendChild(opt);
+    });
+    sel.disabled = false;
+  } else {
+    sel.disabled = true;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERFIL → BANCA MILITAR
+══════════════════════════════════════════════════════════════ */
+function onPerfil() {
+  const p = document.getElementById('f-perfil').value;
+  const bw = document.getElementById('banca-wrap');
+  bw.style.display = (p === 'Militares') ? 'block' : 'none';
+  if (p !== 'Militares') document.getElementById('f-banca').value = '';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MARCA (white-label)
+══════════════════════════════════════════════════════════════ */
+function onMarca() {
+  const v = document.getElementById('f-marca').value;
+  const show = v.toLowerCase().includes('remover');
+  document.getElementById('nome-cabe-wrap').style.display = show ? 'block' : 'none';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   APARÊNCIA — exibir conforme plano
+══════════════════════════════════════════════════════════════ */
+function aplicarPlano(info) {
+  planInfo = info;
+  const notice   = document.getElementById('upgrade-notice');
+  const aparSec  = document.getElementById('apearance-section');
+  const wlSec    = document.getElementById('white-label-section');
+  const planLbl  = document.getElementById('cr-plano-lbl');
+
+  const nomes = { basic:'Plano Basic', pro:'Plano Pro', premium:'Plano Premium' };
+  planLbl.textContent = nomes[info.plano] || info.plano;
+
+  if (info.podePersonalizar) {
+    aparSec.classList.add('show');
+    notice.style.display = 'none';
+  } else {
+    aparSec.classList.remove('show');
+    notice.style.display = 'block';
+  }
+
+  if (info.podeWhiteLabel) {
+    wlSec.style.display = 'block';
+  } else {
+    wlSec.style.display = 'none';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   VALIDAR TOKEN
+══════════════════════════════════════════════════════════════ */
+async function validarToken() {
+  const email = v('f-email');
+  const prof  = v('f-prof');
+  const token = v('f-token');
+  const msgEl = document.getElementById('msg-token');
+  const btnEl = document.getElementById('btn-val');
+
+  msgEl.className = 'msg';
+  if (!email || !token) { showMsg(msgEl,'err','Preencha o e-mail e o token antes de validar.'); return; }
+  if (!email.includes('@')) { showMsg(msgEl,'err','Digite um e-mail válido.'); return; }
+
+  btnEl.disabled = true;
+  btnEl.innerHTML = '<span class="spin"></span>Validando...';
+
+  /* Modo demonstração */
+  if (SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
+    await sleep(1000);
+    if (token.length >= 6) {
+      const demo = { nome: prof||'Professor', saldo:42, plano:'pro', podePersonalizar:true, podeWhiteLabel:false };
+      onTokenOk(demo);
+      showMsg(msgEl,'ok','Modo demonstração (plano Pro simulado). Configure SCRIPT_URL para produção.');
+    } else {
+      showMsg(msgEl,'err','Token inválido. (Demo: use 6+ caracteres)');
+      btnEl.disabled=false; btnEl.textContent='Validar';
+    }
+    return;
+  }
+
+  try {
+    const res  = await fetch(SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action: 'validateToken',
+        'E-mail do Professor': email,
+        'Código de acesso / token': token
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      onTokenOk({ nome: data.nome||prof||'Professor', saldo: data.saldo??0,
+                  plano: data.plano||'basic',
+                  podePersonalizar: !!data.podePersonalizar,
+                  podeWhiteLabel: !!data.podeWhiteLabel });
+    } else {
+      showMsg(msgEl,'err', data.message||'Token inválido.');
+      btnEl.disabled=false; btnEl.textContent='Validar';
+    }
+  } catch(err) {
+    showMsg(msgEl,'err','Erro de conexão. Verifique a URL do AppScript.');
+    btnEl.disabled=false; btnEl.textContent='Validar';
+  }
+}
+
+function onTokenOk(data) {
+  tokenOk = true;
+  document.getElementById('cr-nome').textContent  = data.nome;
+  document.getElementById('cr-saldo').textContent = data.saldo;
+  document.getElementById('credit-panel').classList.add('show');
+
+  const btn = document.getElementById('btn-val');
+  btn.textContent = '✓ Validado';
+  btn.classList.add('ok');
+
+  document.getElementById('form-section').classList.add('show');
+
+  aplicarPlano({ plano: data.plano, podePersonalizar: data.podePersonalizar, podeWhiteLabel: data.podeWhiteLabel });
+
+  setStep('s1','done'); setStep('s2','active');
+
+  setTimeout(() =>
+    document.getElementById('form-section').scrollIntoView({behavior:'smooth',block:'start'}), 350);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ENVIAR — BUILD PAYLOAD
+   Chaves batem EXATAMENTE com META_COLUMNS do AppScript.
+   O \u2014 é o travessão — que está no nome das colunas.
+══════════════════════════════════════════════════════════════ */
+async function enviar() {
+  if (!tokenOk) { alert('Valide seu token antes de gerar.'); return; }
+
+  const msgEl = document.getElementById('msg-sub');
+  const btnEl = document.getElementById('btn-sub');
+  msgEl.className = 'msg';
+
+  const payload = buildPayload();
+  const erros   = validar(payload);
+  if (erros.length) {
+    showMsg(msgEl,'err','⚠ ' + erros.join(' · '));
+    msgEl.scrollIntoView({behavior:'smooth',block:'center'}); return;
+  }
+
+  btnEl.disabled = true;
+  btnEl.innerHTML = '<span class="spin"></span>Gerando lista...';
+  showMsg(msgEl,'wait','⏳ Processando... Você receberá o PDF por e-mail. Aguarde até 90 segundos.');
+  setStep('s2','done'); setStep('s3','active');
+
+  if (SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
+    await sleep(2000);
+    showMsg(msgEl,'ok','✅ (Demonstração) Em produção, o PDF seria enviado para '
+      + payload['E-mail do Professor'] + '. Configure SCRIPT_URL para ativar o envio real.');
+    btnEl.disabled=false; btnEl.textContent='Gerar nova lista'; return;
+  }
+
+  try {
+    const res  = await fetch(SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'generateList', ...payload })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showMsg(msgEl,'ok','✅ PDF enviado para '+ payload['E-mail do Professor']
+        +'. Saldo restante: '+(data.saldo_restante??'—')+' créditos.');
+      if (data.saldo_restante !== undefined)
+        document.getElementById('cr-saldo').textContent = data.saldo_restante;
+      btnEl.textContent = 'Gerar nova lista';
+    } else {
+      showMsg(msgEl,'err','⚠ '+(data.message||'Erro ao gerar. Tente novamente.'));
+      btnEl.textContent = 'Gerar lista de exercícios';
+    }
+  } catch(err) {
+    showMsg(msgEl,'err','Erro de conexão com o servidor.');
+    btnEl.textContent = 'Gerar lista de exercícios';
+  }
+
+  btnEl.disabled = false;
+  msgEl.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function buildPayload() {
+  const nivel = v('f-nivel');
+  // chave exata do META_COLUMNS (com travessão \u2014)
+  const temaKey = {
+    'Fundamental 1': 'Tema Espec\u00edfico (Matem\u00e1tica \u2014 Fundamental 1)',
+    'Fundamental 2': 'Tema Espec\u00edfico (Matem\u00e1tica \u2014 Fundamental 2)',
+    'Ensino M\u00e9dio': 'Tema Espec\u00edfico (Matem\u00e1tica \u2014 Ensino M\u00e9dio)',
+  }[nivel] || 'Tema Espec\u00edfico (Matem\u00e1tica \u2014 Fundamental 2)';
+
+  const corSelecionada  = document.querySelector('input[name="cor"]:checked')?.value || 'Azul Vectora';
+  const hexPersonalizado = v('f-hex');
+  const exibirProf      = document.getElementById('f-exibir-prof').checked;
+  const marcaVal        = planInfo.podeWhiteLabel ? (v('f-marca') || 'Vectora (padrão)') : 'Vectora (padrão)';
+  const nomeCabVal      = planInfo.podeWhiteLabel ? v('f-nome-cab') : '';
+
+  return {
+    // ── identificação
+    'E-mail do Professor':        v('f-email'),
+    'Nome do Professor / Escola': v('f-prof'),
+    'Código de acesso / token':   v('f-token'),
+    // ── disciplina / nível / tema
+    'Disciplina': 'Matemática',
+    'Nível Escolar Principal para a Lista (Matemática)': nivel,
+    [temaKey]: v('f-tema'),
+    // ── perfil
+    'Perfil de geração da lista': v('f-perfil'),
+    'Banca / concurso militar':   v('f-banca'),
+    // ── parâmetros
+    'Objetivo Pedagógico da Lista':          v('f-obj'),
+    'Nível de Dificuldade Predominante':     v('f-dif'),
+    'Formato dos Exercícios':                v('f-estilo'),
+    'Foco da Lista':                         v('f-foco'),
+    'Quantidade de Exercícios':
+      document.querySelector('input[name="qty"]:checked')?.value || '10',
+    // ── instruções
+    'Recorte específico do conteúdo / Instruções do professor': v('f-recorte'),
+    'Observações e Detalhes Adicionais (Opcional)':             v('f-obs'),
+    // ── tipo e layout
+    'Tipo de Material Desejado': document.querySelector('input[name="tipo"]:checked').value,
+    'Estilo da lista':           v('f-layout'),
+    // ── aparência
+    'Deseja personalizar a aparência da lista?':
+      planInfo.podePersonalizar ? 'Sim, quero ajustar opções visuais' : '',
+    'Cor principal da lista':      planInfo.podePersonalizar ? corSelecionada : '',
+    'Código da cor personalizada': (planInfo.podePersonalizar && corSelecionada === 'Cor personalizada') ? hexPersonalizado : '',
+    'Estilo da moldura':           planInfo.podePersonalizar ? v('f-moldura') : '',
+    'Exibição da marca':           marcaVal,
+    'Nome para exibir no cabeçalho': nomeCabVal,
+    'Exibir nome do professor no material?': exibirProf ? 'Sim' : 'Não',
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   VALIDAÇÃO CLIENT-SIDE
+══════════════════════════════════════════════════════════════ */
+function validar(p) {
+  const erros = [];
+  const nivel = p['Nível Escolar Principal para a Lista (Matemática)'];
+  if (!nivel) erros.push('Selecione o nível escolar.');
+
+  const temaKey = {
+    'Fundamental 1': 'Tema Específico (Matemática \u2014 Fundamental 1)',
+    'Fundamental 2': 'Tema Específico (Matemática \u2014 Fundamental 2)',
+    'Ensino Médio':  'Tema Específico (Matemática \u2014 Ensino Médio)',
+  }[nivel];
+  if (!temaKey || !p[temaKey]) erros.push('Selecione o tema.');
+
+  if (!p['Perfil de geração da lista']) erros.push('Selecione o perfil de geração.');
+  if (p['Perfil de geração da lista'] === 'Militares' && !p['Banca / concurso militar'])
+    erros.push('Selecione a banca militar.');
+
+  if (p['Exibição da marca']?.toLowerCase().includes('remover') && !p['Nome para exibir no cabeçalho'])
+    erros.push('Informe o nome para o cabeçalho (white-label ativo).');
+
+  return erros;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════════ */
+function v(id) { return (document.getElementById(id)?.value||'').trim(); }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function showMsg(el,cls,txt) { el.className='msg '+cls; el.textContent=txt; }
+function setStep(id,cls) {
+  const el=document.getElementById(id);
+  el.className='step '+cls;
+  if(cls==='done') el.querySelector('.step-n').textContent='✓';
+}
+</script>
+</body>
+</html>
