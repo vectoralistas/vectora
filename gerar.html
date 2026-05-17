@@ -751,7 +751,7 @@ footer { text-align:center; padding:36px 20px; border-top:1px solid var(--b1); m
      Apps Script → Implantar → Nova implantação →
      Web App → Executar como: Eu → Acesso: Qualquer pessoa
 ══════════════════════════════════════════════════════════════ */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyhubHzAvWZnCozAbMDiPv_AjPJKsjs7R6EpyMWQMiMJNcsgvJwF1gh7huNzHKj8axN/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyeoKnQ7IihF7OLqcbdr6fWGw8jQuV3ITif63V8pWW86o1WEJ3VDx0DmpX7b0wd8nwp/exec';
 
 /* ══════════════════════════════════════════════════════════════
    TEMAS — espelham exatamente as chaves do THEMES_MAP
@@ -908,7 +908,7 @@ async function validarToken() {
   btnEl.innerHTML = '<span class="spin"></span>Validando...';
 
   /* Modo demonstração */
-  if (SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
+  if (false) /* demo mode desativado */ {
     await sleep(1000);
     if (token.length >= 6) {
       const demo = { nome: prof||'Professor', saldo:42, plano:'pro', podePersonalizar:true, podeWhiteLabel:false };
@@ -923,17 +923,12 @@ async function validarToken() {
 
   try {
     const res  = await fetch(SCRIPT_URL, {
-      method:'POST', headers: { 'Content-Type': 'text/plain' },
-      // DEPOIS — só muda o headers
-const res = await fetch(SCRIPT_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'text/plain' },
-  body: JSON.stringify({
-    action: 'validateToken',
-    'E-mail do Professor': email,
-    'Código de acesso / token': token
-  })
-});
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        action: 'validateToken',
+        'E-mail do Professor': email,
+        'Código de acesso / token': token
+      })
     });
     const data = await res.json();
     if (data.success) {
@@ -995,7 +990,7 @@ async function enviar() {
   showMsg(msgEl,'wait','⏳ Processando... Você receberá o PDF por e-mail. Aguarde até 90 segundos.');
   setStep('s2','done'); setStep('s3','active');
 
-  if (SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
+  if (false) /* demo mode desativado */ {
     await sleep(2000);
     showMsg(msgEl,'ok','✅ (Demonstração) Em produção, o PDF seria enviado para '
       + payload['E-mail do Professor'] + '. Configure SCRIPT_URL para ativar o envio real.');
@@ -1004,7 +999,7 @@ async function enviar() {
 
   try {
     const res  = await fetch(SCRIPT_URL, {
-      method:'POST', headers: { 'Content-Type': 'text/plain' },
+      method:'POST', headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({ action:'generateList', ...payload })
     });
     const data = await res.json();
