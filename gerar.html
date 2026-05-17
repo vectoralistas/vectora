@@ -923,12 +923,17 @@ async function validarToken() {
 
   try {
     const res  = await fetch(SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action: 'validateToken',
-        'E-mail do Professor': email,
-        'Código de acesso / token': token
-      })
+      method:'POST', headers: { 'Content-Type': 'text/plain' },
+      // DEPOIS — só muda o headers
+const res = await fetch(SCRIPT_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'text/plain' },
+  body: JSON.stringify({
+    action: 'validateToken',
+    'E-mail do Professor': email,
+    'Código de acesso / token': token
+  })
+});
     });
     const data = await res.json();
     if (data.success) {
@@ -999,7 +1004,7 @@ async function enviar() {
 
   try {
     const res  = await fetch(SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
+      method:'POST', headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ action:'generateList', ...payload })
     });
     const data = await res.json();
